@@ -11,7 +11,5 @@ RUN add-apt-repository ppa:certbot/certbot
 RUN apt-get update
 RUN apt-get install -y certbot
 
-RUN mkdir /var/www/letsencrypt/
-
 # Renew letsencrypt certificates
 RUN (crontab -l ; echo "15 3 * * * /usr/bin/certbot renew --quiet --renew-hook \"/usr/bin/gitlab-ctl restart nginx\"")| crontab -

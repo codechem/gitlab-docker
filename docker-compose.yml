@@ -6,13 +6,19 @@ web:
   environment:
     GITLAB_OMNIBUS_CONFIG: |
       external_url 'https://git.codechem.com/'
-      nginx['custom_gitlab_server_config'] = "location ^~ /.well-known { root /var/www/letsencrypt; }"
-      nginx['redirect_http_to_https'] = true
-      nginx['ssl_certificate'] = "/etc/letsencrypt/live/git.codechem.com/fullchain.pem"
-      nginx['ssl_certificate_key'] = "/etc/letsencrypt/live/git.codechem.com/privkey.pem"
+      #nginx['custom_gitlab_server_config'] = "location ^~ /.well-known { root /var/www/letsencrypt; }"
+      #nginx['redirect_http_to_https'] = true
+      nginx['listen_port'] = 80
+      nginx['listen_https'] = false
+      nginx['proxy_set_headers'] = {
+        "X-Forwarded-Proto" => "https",
+        "X-Forwarded-Ssl" => "on"
+      }
+      nginx['client_max_body_size'] = "200m"
+      #nginx['ssl_certificate'] = "/etc/letsencrypt/live/git.codechem.com/fullchain.pem"
+      #nginx['ssl_certificate_key'] = "/etc/letsencrypt/live/git.codechem.com/privkey.pem"
   ports:
-    - '80:80'
-    - '443:443'
+    - '8980:80'
     - '22:22'
   volumes:
     - './config:/etc/gitlab'
