@@ -3,11 +3,12 @@ MAINTAINER Ilija Boshkov
 
 # For add-apt-repository
 RUN apt-get update
-RUN apt-get install -y software-properties-common python
+RUN apt-get install -y software-properties-common python dirmngr
 RUN apt-get update
 
 # Add letsencrypt certbot repo and install
-RUN add-apt-repository ppa:certbot/certbot
+# export part fixes "dirmngr" issue with gitlab's PATH setting
+RUN export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && add-apt-repository ppa:certbot/certbot
 RUN apt-get update
 RUN apt-get install -y certbot
 
